@@ -9,7 +9,7 @@ class Menu < ApplicationRecord
 
   def self.tree_structure(project_id, parent_id = nil)
     # 查询出所有满足条件的子数据
-    children = where(parent_id: parent_id, project_id: project_id)
+    children = where(parent_id: parent_id, project_id: project_id).order(sequ: :asc)
 
     # 遍历子数据，递归调用方法，将子数据的子数据放入其 children 中
     children.each do |child|

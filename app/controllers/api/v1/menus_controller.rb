@@ -23,14 +23,14 @@ class Api::V1::MenusController < ApplicationController
   end
 
   def tree
-    menus = Menu.tree_structure(request.env["active_project_id"])
+    menus = Menu.order(sequ: :asc).tree_structure(request.env["active_project_id"])
 
     # 将菜单数据转换为 JSON 格式，并返回给客户端
     render json: menus
   end
 
   def list
-    menus = Menu.where({project_id: request.env["active_project_id"]})
+    menus = Menu.where({project_id: request.env["active_project_id"]}).order(sequ: :asc)
     render json: menus.as_json(exclude_children: true)
   end
 
