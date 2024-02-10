@@ -1,7 +1,9 @@
 class User < ApplicationRecord
   has_secure_password
 
-  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP, message: "邮箱格式不正确" }
+  has_and_belongs_to_many :projects
+
+  validates :email, presence: true, format: { with: URI::MailTo::EMAIL_REGEXP, message: "邮箱格式不正确" }, uniqueness: { message: "该邮箱已经被注册" }
   validates :password, presence: {message: "不能为空"}, format: { with: /^(?=.*\d)(?=.*[a-zA-Z])(?=.*[^\da-zA-Z\s]).{8,16}$/, multiline: true , message: "密码格式不正确(至少包含字母、数字、特殊字符，8-16位)" }
   validates :name, presence: {message: "不能为空"}
 
