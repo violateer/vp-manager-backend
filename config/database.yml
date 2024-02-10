@@ -22,6 +22,7 @@ default: &default
 development:
   <<: *default
   database: vpmanager_dev
+  timezone: Asia/Shanghai
   username: admin
   password: 123456
   host: 172.16.0.88

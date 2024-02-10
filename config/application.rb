@@ -33,7 +33,8 @@ module VpManagerBackend
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # config.time_zone = "Central Time (US & Canada)"
+    config.active_record.default_timezone = :local  # 设置本地时间，不加这句数据库存的还是UTC
+    config.time_zone = "Asia/Shanghai"                   
     # config.eager_load_paths << Rails.root.join("extras")
 
     # Only loads a smaller set of middleware suitable for API only apps.
