@@ -14,6 +14,9 @@ require "action_view/railtie"
 require "action_cable/engine"
 # require "rails/test_unit/railtie"
 
+# 自定义中间件
+require_relative "../lib/auto_jwt"
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -34,12 +37,13 @@ module VpManagerBackend
     # in config/environments, which are processed later.
     #
     config.active_record.default_timezone = :local  # 设置本地时间，不加这句数据库存的还是UTC
-    config.time_zone = "Asia/Shanghai"                   
+    config.time_zone = "Asia/Shanghai"
     # config.eager_load_paths << Rails.root.join("extras")
 
     # Only loads a smaller set of middleware suitable for API only apps.
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+    config.middleware.use AutoJwt
   end
 end
