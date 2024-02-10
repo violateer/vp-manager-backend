@@ -20,6 +20,7 @@ class AutoJwt
       return [401, {}, [JSON.generate({ errno: 40102, reason: "token invalid" })]]
     end
     env["current_user_id"] = payload[0]["user_id"] rescue nil
+    env["active_project_id"] = payload[0]["active_project_id"] rescue nil
     @status, @headers, @response = @app.call(env)
 
     # 状态码 ， 响应头 ， 响应体

@@ -9,7 +9,7 @@ class User < ApplicationRecord
   validates :name, presence: {message: "不能为空"}
 
   def generate_jwt
-    payload = { user_id: self.id, active_project_id: self.active_project, exp: (Time.now + 2.hours).to_i }
+    payload = { user_id: self.id, active_project_id: self.active_project.id, exp: (Time.now + 2.hours).to_i }
     JWT.encode payload, Rails.application.credentials.hmac_secret, "HS256"
   end
 

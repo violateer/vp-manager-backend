@@ -16,7 +16,12 @@ Rails.application.routes.draw do
       resource :register, only: [:create]
       resource :me, only: [:show]
       resources :projects
-      resources :menus
+      resources :menus do
+        collection  do
+          get :tree
+          get :list
+        end
+      end
     end
   end
 end
