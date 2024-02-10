@@ -13,6 +13,8 @@ Rails.application.routes.draw do
       # /api/v1
       resource :project, only: [:create, :show, :destroy]
       resource :session, only: [:create, :destroy]
+      resource :login, only: [:create]
+      resource :register, only: [:create]
       resource :me, only: [:show]
     end
   end
