@@ -11,11 +11,12 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       # /api/v1
-      resources :projects
       resource :session, only: [:create, :destroy]
       resource :login, only: [:create]
       resource :register, only: [:create]
       resource :me, only: [:show]
+      resources :projects
+      resources :menus
     end
   end
 end

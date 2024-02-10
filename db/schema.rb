@@ -10,14 +10,26 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_10_082106) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_10_114246) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "menus", force: :cascade do |t|
+    t.string "old_id"
+    t.string "name"
+    t.integer "project_id"
+    t.integer "parent_id"
+    t.integer "level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "projects", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "manager_user_id", null: false
+    t.index ["manager_user_id"], name: "index_projects_on_manager_user_id"
   end
 
   create_table "projects_users", id: false, force: :cascade do |t|
@@ -37,4 +49,5 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_10_082106) do
     t.string "password_digest"
   end
 
+  add_foreign_key "projects", "users", column: "manager_user_id"
 end
