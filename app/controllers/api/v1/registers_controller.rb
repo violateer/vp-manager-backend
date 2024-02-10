@@ -6,6 +6,12 @@ class Api::V1::RegistersController < ApplicationController
     if user.nil?
       newUser = User.new email: params[:email], password: params[:password], name: params[:name]
       if newUser.save
+          # 创建账号时默认创建一个自己的项目
+          project = newUser.projects.create name: "我的个人空间", manager_user: newUser
+          project.save
+
+          newUser.update active_project: project
+
           render json: { token: newUser.generate_jwt }, status: :ok
       else
           render json: { errors: newUser.errors }, status: :unprocessable_entity
