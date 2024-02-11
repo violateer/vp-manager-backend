@@ -7,7 +7,7 @@ class AutoJwt
 
   def call(env)
     # 排除不需要jwt的接口
-    return @app.call(env) if ["/api/v1/session", "/api/v1/login", "/api/v1/register", "/api/v1/me"].include? env["PATH_INFO"]
+    return @app.call(env) if ["/api/v1/session", "/api/v1/login", "/api/v1/register"].include? env["PATH_INFO"]
 
     header = env["HTTP_AUTHORIZATION"]
     jwt = header.split(" ")[1] rescue ""
