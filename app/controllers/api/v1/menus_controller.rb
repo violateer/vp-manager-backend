@@ -38,6 +38,20 @@ class Api::V1::MenusController < ApplicationController
     render json: { resource: menus.as_json(exclude_children: true) }, status: :ok
   end
 
+  def update
+    current_user = User.find request.env["current_user_id"]
+    return render status :unauthorized if current_user.nil?
+
+    menu = Menu.find params[:id]
+    menu.update params.permit(:name)
+    if menu.errors.empty?
+      render json: { resource: menu }, status: :ok
+    else
+      render json: { errors: menu.errors }, status: :unprocessable_entity
+    end
+
+  end
+
   def delete_multi
     current_user = User.find request.env["current_user_id"]
     return render status :unauthorized if current_user.nil?
