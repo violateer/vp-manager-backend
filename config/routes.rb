@@ -20,6 +20,7 @@ Rails.application.routes.draw do
         collection  do
           get :tree
           get :list
+          delete :delete_multi
         end
       end
     end

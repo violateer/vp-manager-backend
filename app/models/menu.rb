@@ -6,6 +6,9 @@ class Menu < ApplicationRecord
   validates :project_id, presence: {message: "不能为空"}
   validates :level, presence: {message: "不能为空"}
 
+  belongs_to :parent, class_name: "Menu", optional: true
+  has_many :children, class_name: "Menu", foreign_key: "parent_id", dependent: :destroy
+
 
   def self.tree_structure(project_id, parent_id = nil)
     # 查询出所有满足条件的子数据
@@ -26,5 +29,18 @@ class Menu < ApplicationRecord
     else
       super(options.merge({methods: [:children]}))
     end
+  end
+
+  # 删除父级及子级
+  def self.delete_with_children(parent_id)
+    menu = Menu.find_by(id: parent_id)
+    return unless menu
+
+    children = menu.children.to_a
+    children.each do |child|
+      delete_with_children(child.id)
+    end
+
+    menu.destroy
   end
 end

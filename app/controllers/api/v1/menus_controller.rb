@@ -23,15 +23,40 @@ class Api::V1::MenusController < ApplicationController
   end
 
   def tree
-    menus = Menu.order(sequ: :asc).tree_structure(request.env["active_project_id"])
+    active_project = Project.find request.env["active_project_id"]
+    return render status :unauthorized if active_project.nil?
+    menus = Menu.order(sequ: :asc).tree_structure(active_project)
 
     # 将菜单数据转换为 JSON 格式，并返回给客户端
-    render json: menus
+    render json: { resource: menus }, status: :ok
   end
 
   def list
-    menus = Menu.where({project_id: request.env["active_project_id"]}).order(sequ: :asc)
-    render json: menus.as_json(exclude_children: true)
+    active_project = Project.find request.env["active_project_id"]
+    return render status :unauthorized if active_project.nil?
+    menus = Menu.where({project_id: active_project}).order(sequ: :asc)
+    render json: { resource: menus.as_json(exclude_children: true) }, status: :ok
+  end
+
+  def delete_multi
+    current_user = User.find request.env["current_user_id"]
+    return render status :unauthorized if current_user.nil?
+    active_project = Project.find request.env["active_project_id"]
+    return render status :unauthorized if active_project.nil?
+
+    ids = params[:ids].split(',')
+
+    if ids.blank?
+      render json: { message: "请传入要删除的id" }, status: :unprocessable_entity
+      return
+    end
+
+    ids.each do |parent_id|
+      Menu.delete_with_children(parent_id)
+    end
+
+    render json: { message: "删除成功！" }, status: :ok
+
   end
 
 end
