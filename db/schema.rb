@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_14_075023) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_17_091412) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -52,6 +52,4 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_14_075023) do
     t.index ["active_project_id"], name: "index_users_on_active_project_id"
   end
 
-  add_foreign_key "projects", "users", column: "manager_user_id"
-  add_foreign_key "users", "projects", column: "active_project_id"
 end
