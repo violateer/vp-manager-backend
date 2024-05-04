@@ -7,10 +7,10 @@ class Api::V1::RegistersController < ApplicationController
       newUser = User.new email: params[:email], password: params[:password], name: params[:name], phone: params[:phone]
       if newUser.save
           # 创建账号时默认创建一个自己的项目
-          project = newUser.projects.create name: "我的个人空间", manager_user: newUser
+          project = Project.create name: "我的个人空间", manager_user_id: newUser.id
 
           if project.save
-            newUser.update active_project: project
+            newUser.update active_project_id: project.id
 
             render json: { token: newUser.generate_jwt }, status: :ok
           else
