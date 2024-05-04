@@ -15,9 +15,9 @@ class AutoJwt
     begin
       payload = JWT.decode jwt, Rails.application.credentials.hmac_secret, true, { algorithm: "HS256" }
     rescue JWT::ExpiredSignature
-      return [401, {}, [JSON.generate({ errno: 40101, reason: "token expired" })]]
+      return [401, {}, [JSON.generate({ errno: 40101, message: "token expired" })]]
     rescue
-      return [401, {}, [JSON.generate({ errno: 40102, reason: "token invalid" })]]
+      return [401, {}, [JSON.generate({ errno: 40102, message: "token invalid" })]]
     end
     env["current_user_id"] = payload[0]["user_id"] rescue nil
     env["active_project_id"] = payload[0]["active_project_id"] rescue nil
