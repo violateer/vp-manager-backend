@@ -3,10 +3,9 @@ class Api::V1::MenusController < ApplicationController
     current_user = User.find request.env["current_user_id"]
     return render status :unauthorized if current_user.nil?
 
-    project = Project.find_by_id request.env["active_project_id"]
 
     parent_menu = Menu.find_by_id params["parent_id"]
-    menu = Menu.new name: params[:name], project_id: project.id
+    menu = Menu.new name: params[:name]
 
     if parent_menu.nil?
       menu.level = 0
@@ -23,18 +22,18 @@ class Api::V1::MenusController < ApplicationController
   end
 
   def tree
-    active_project = Project.find request.env["active_project_id"]
-    return render status :unauthorized if active_project.nil?
-    menus = Menu.order(sequ: :asc).tree_structure(active_project)
+    current_user = User.find request.env["current_user_id"]
+    return render status :unauthorized if current_user.nil?
+    menus = Menu.order(sequ: :asc).tree_structure()
 
     # 将菜单数据转换为 JSON 格式，并返回给客户端
     render json: { resource: menus }, status: :ok
   end
 
   def list
-    active_project = Project.find request.env["active_project_id"]
-    return render status :unauthorized if active_project.nil?
-    menus = Menu.where({project_id: active_project}).order(sequ: :asc)
+    current_user = User.find request.env["current_user_id"]
+    return render status :unauthorized if current_user.nil?
+    menus = Menu.all.order(sequ: :asc)
     render json: { resource: menus.as_json(exclude_children: true) }, status: :ok
   end
 
@@ -55,8 +54,6 @@ class Api::V1::MenusController < ApplicationController
   def delete_multi
     current_user = User.find request.env["current_user_id"]
     return render status :unauthorized if current_user.nil?
-    active_project = Project.find request.env["active_project_id"]
-    return render status :unauthorized if active_project.nil?
 
     ids = params[:ids].split(',')
 

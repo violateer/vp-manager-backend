@@ -14,7 +14,11 @@ Rails.application.routes.draw do
       resource :session, only: [:create, :destroy]
       resource :login, only: [:create]
       resource :register, only: [:create]
-      resource :me, only: [:show]
+      resource :me, only: [:show] do
+        member do
+          get :switch_project
+        end
+      end
       resources :projects do
         collection  do
           get :list

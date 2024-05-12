@@ -3,20 +3,19 @@ class Menu < ApplicationRecord
   attr_accessor :children
 
   validates :name, presence: {message: "不能为空"}
-  validates :project_id, presence: {message: "不能为空"}
   validates :level, presence: {message: "不能为空"}
 
   belongs_to :parent, class_name: "Menu", optional: true
   has_many :children, class_name: "Menu", foreign_key: "parent_id", dependent: :destroy
 
 
-  def self.tree_structure(project_id, parent_id = nil)
+  def self.tree_structure(parent_id = nil)
     # 查询出所有满足条件的子数据
-    children = where(parent_id: parent_id, project_id: project_id).order(sequ: :asc)
+    children = where(parent_id: parent_id).order(sequ: :asc)
 
     # 遍历子数据，递归调用方法，将子数据的子数据放入其 children 中
     children.each do |child|
-      child.children = tree_structure(project_id, child.id)
+      child.children = tree_structure(child.id)
     end
 
     # 返回包含树形结构的数据的数组

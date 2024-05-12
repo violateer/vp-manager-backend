@@ -10,19 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_04_080129) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_12_074402) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "menus", force: :cascade do |t|
     t.string "old_id"
     t.string "name"
-    t.integer "project_id"
     t.integer "parent_id"
     t.integer "level"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.serial "sequ"
+    t.string "icon"
+    t.string "component"
   end
 
   create_table "project_users", force: :cascade do |t|
