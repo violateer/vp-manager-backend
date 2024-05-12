@@ -8,18 +8,19 @@ class Menu < ApplicationRecord
   belongs_to :parent, class_name: "Menu", optional: true
   has_many :children, class_name: "Menu", foreign_key: "parent_id", dependent: :destroy
 
-
   def self.tree_structure(parent_id = nil)
-    # 查询出所有满足条件的子数据
-    children = where(parent_id: parent_id).order(sequ: :asc)
-
-    # 遍历子数据，递归调用方法，将子数据的子数据放入其 children 中
-    children.each do |child|
-      child.children = tree_structure(child.id)
+    menus = where(parent_id: parent_id).order(sequ: :asc)
+  
+    # 递归构建树结构
+    tree = menus.map do |menu|
+      menu_data = menu.attributes.symbolize_keys
+      children = tree_structure(menu.id)
+      menu_data[:children] = children if children.present?
+      menu_data
     end
-
-    # 返回包含树形结构的数据的数组
-    children
+  
+    # 返回树形结构
+    tree
   end
 
   def as_json(options = {})
