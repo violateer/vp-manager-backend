@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_12_074402) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_12_114853) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -24,6 +24,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_12_074402) do
     t.serial "sequ"
     t.string "icon"
     t.string "component"
+    t.string "route"
+    t.string "route_type"
   end
 
   create_table "project_users", force: :cascade do |t|
