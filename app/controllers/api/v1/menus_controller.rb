@@ -5,7 +5,7 @@ class Api::V1::MenusController < ApplicationController
 
 
     parent_menu = Menu.find_by_id params["parent_id"]
-    menu = Menu.new name: params[:name]
+    menu = Menu.new name: params[:name], is_system: 0
 
     if parent_menu.nil?
       menu.level = 0
