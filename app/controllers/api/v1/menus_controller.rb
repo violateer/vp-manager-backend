@@ -51,6 +51,23 @@ class Api::V1::MenusController < ApplicationController
 
   end
 
+  def destroy
+    current_user = User.find request.env["current_user_id"]
+    return render status :unauthorized if current_user.nil?
+    menu = Menu.find_by_id params[:id]
+    return render status: :not_found if menu.nil?
+
+    return render json: { message: "默认菜单不允许删除！" },status: :forbidden if menu.is_system == "1"
+
+    if Menu.delete_with_children(params[:id])
+      # 删除成功，返回成功信息
+      render json: { resources: menu, message: "删除成功！" }, status: :ok
+    else
+      # 删除失败，返回失败信息
+      render json: { error: "删除失败！" }, status: :unprocessable_entity
+    end
+  end
+
   def delete_multi
     current_user = User.find request.env["current_user_id"]
     return render status :unauthorized if current_user.nil?
