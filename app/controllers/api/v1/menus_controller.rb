@@ -42,7 +42,7 @@ class Api::V1::MenusController < ApplicationController
     return render status :unauthorized if current_user.nil?
 
     menu = Menu.find params[:id]
-    menu.update params.permit(:name)
+    menu.update params.permit(:name, :icon, :component, :route, :route_type).to_h.compact
     if menu.errors.empty?
       render json: { resource: menu }, status: :ok
     else
@@ -57,7 +57,7 @@ class Api::V1::MenusController < ApplicationController
     menu = Menu.find_by_id params[:id]
     return render status: :not_found if menu.nil?
 
-    return render json: { message: "默认菜单不允许删除！" },status: :forbidden if menu.is_system == "1"
+    return render json: { message: "默认菜单不允许删除！" },status: :forbidden if menu.is_system == 1
 
     if Menu.delete_with_children(params[:id])
       # 删除成功，返回成功信息
