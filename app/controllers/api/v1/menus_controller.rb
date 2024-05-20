@@ -42,7 +42,7 @@ class Api::V1::MenusController < ApplicationController
     return render status :unauthorized if current_user.nil?
 
     menu = Menu.find params[:id]
-    menu.update params.permit(:name, :icon, :component, :route, :route_type).to_h.compact
+    menu.update params.permit(:name, :icon, :component, :route, :route_type).to_h
     if menu.errors.empty?
       render json: { resource: menu }, status: :ok
     else
